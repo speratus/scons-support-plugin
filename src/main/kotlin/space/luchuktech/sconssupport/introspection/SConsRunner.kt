@@ -20,14 +20,14 @@ object SConsRunner {
         silent: Boolean = true
     ): RunResult {
         val state = settings.state
-        val python = state.pythonPath.ifBlank { "python3" }
-        // val scons = state.sconsPath.ifBlank { "scons" }
+//        val python = state.pythonPath.ifBlank { "python3" }
+         val scons = state.sconsPath.ifBlank { "scons" }
 
         require(extraArgs.none { it == "--no-dry-run" }) {
             "SCons must never be invoked without --dry-run during introspection"
         }
 
-        val cmd = mutableListOf(python, "-m", "SCons", "-n")
+        val cmd = mutableListOf(scons, "-n")
         if (silent) {
             cmd.add("-Q")
             cmd.add("--silent")

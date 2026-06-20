@@ -139,7 +139,8 @@ class SConsToolWindowPanel(private val project: Project) : SimpleToolWindowPanel
                 val state = settings.state
                 
                 val python = state.pythonPath.ifBlank { "python3" }
-                val cmd = mutableListOf(python, "-m", "SCons", targetName)
+                val scons = state.sconsPath.ifBlank { "scons" }
+                val cmd = mutableListOf(scons, targetName)
                 
                 // Add options from table
                 val tableModel = optionsTable.model as DefaultTableModel
