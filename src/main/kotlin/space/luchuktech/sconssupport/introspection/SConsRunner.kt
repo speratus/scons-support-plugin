@@ -6,6 +6,7 @@ import com.intellij.execution.process.ProcessAdapter
 import com.intellij.execution.process.ProcessEvent
 import com.intellij.openapi.progress.ProgressIndicator
 import com.intellij.openapi.util.Key
+import com.intellij.openapi.util.SystemInfo
 import space.luchuktech.sconssupport.settings.SConsProjectSettings
 import java.nio.file.Path
 
@@ -21,7 +22,12 @@ object SConsRunner {
     ): RunResult {
         val state = settings.state
 //        val python = state.pythonPath.ifBlank { "python3" }
-         val scons = state.sconsPath.ifBlank { "scons" }
+         val scons = state.sconsPath.ifBlank {
+             if (SystemInfo.isWindows) {
+                 return@ifBlank "scons.cmd"
+             }
+             "scons"
+         }
 
         require(extraArgs.none { it == "--no-dry-run" }) {
             "SCons must never be invoked without --dry-run during introspection"
