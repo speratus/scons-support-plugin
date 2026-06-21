@@ -10,6 +10,7 @@ import com.intellij.openapi.progress.Task
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.SimpleToolWindowPanel
 import com.intellij.openapi.util.Key
+import com.intellij.openapi.util.SystemInfo
 import com.intellij.ui.JBSplitter
 import com.intellij.ui.components.JBList
 import com.intellij.ui.components.JBScrollPane
@@ -139,7 +140,12 @@ class SConsToolWindowPanel(private val project: Project) : SimpleToolWindowPanel
                 val state = settings.state
                 
                 val python = state.pythonPath.ifBlank { "python3" }
-                val scons = state.sconsPath.ifBlank { "scons" }
+                val scons = state.sconsPath.ifBlank {
+                    if (SystemInfo.isWindows) {
+                        return@ifBlank "scons.cmd"
+                    }
+                    "scons"
+                }
                 val cmd = mutableListOf(scons, targetName)
                 
                 // Add options from table
