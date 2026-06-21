@@ -34,9 +34,11 @@ object SConsRunner {
         }
         cmd.addAll(extraArgs)
 
-        val commandLine = GeneralCommandLine(cmd)
+        var commandLine = GeneralCommandLine(cmd)
             .withWorkDirectory(projectRoot.toFile())
             .withParentEnvironmentType(GeneralCommandLine.ParentEnvironmentType.CONSOLE)
+
+        commandLine = commandLine.withEnvironment(commandLine.parentEnvironment)
 
         val handler = OSProcessHandler(commandLine)
         val stdoutBuilder = StringBuilder()
