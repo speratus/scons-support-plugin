@@ -51,20 +51,18 @@ class SConsIntrospect:
 
     def _wrap_env(self, env):
         # Wrap builder methods to capture targets
-        builders = ['Program', 'Library', 'SharedLibrary', 'StaticLibrary', 'Object', 'Command', 'Alias', 'Java', 'Jar']
-        for builder_name in builders:
-            if builder_name in env:
-                original_builder = env[builder_name]
-                def make_wrapper(name, original):
-                    def wrapper(*args, **kwargs):
-                        result = original(*args, **kwargs)
-                        try:
-                            self._capture_target(env, name, args, kwargs, result)
-                        except Exception:
-                            pass
-                        return result
-                    return wrapper
-                env[builder_name] = make_wrapper(builder_name, original_builder)
+        for builder_name in env['BUILDERS']:
+            original_builder = env['BUILDERS'][builder_name]
+            def make_wrapper(name, original):
+                def wrapper(*args, **kwargs):
+                    result = original(*args, **kwargs)
+                    try:
+                        self._capture_target(env, name, args, kwargs, result)
+                    except Exception:
+                        pass
+                    return result
+                return wrapper
+            env['BUILDERS'][builder_name] = make_wrapper(builder_name, original_builder)
 
     def _capture_target(self, env, type_name, args, kwargs, result):
         # result is usually a list of Nodes
