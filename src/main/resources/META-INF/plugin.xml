@@ -17,7 +17,7 @@
 
         <toolWindow
             id="SCons"
-            anchor="bottom"
+            anchor="right"
             factoryClass="space.luchuktech.sconssupport.toolwindow.SConsToolWindowFactory"
             icon="/icons/scons.svg"/>
     </extensions>
