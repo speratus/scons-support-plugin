@@ -51,7 +51,7 @@ class SConsIntrospect:
 
     def _wrap_env(self, env):
         # Wrap builder methods to capture targets
-        builders = ['Program', 'Library', 'SharedLibrary', 'StaticLibrary', 'Object', 'Command', 'Alias']
+        builders = ['Program', 'Library', 'SharedLibrary', 'StaticLibrary', 'Object', 'Command', 'Alias', 'Java', 'Jar']
         for builder_name in builders:
             if builder_name in env:
                 original_builder = env[builder_name]
