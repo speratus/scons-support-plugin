@@ -1,6 +1,7 @@
 ﻿package space.luchuktech.sconssupport.introspection
 
 import com.intellij.openapi.diagnostic.Logger
+import java.nio.charset.StandardCharsets
 import java.nio.file.Path
 import kotlin.io.path.*
 
@@ -15,7 +16,17 @@ object SConsShimInstaller {
             LOG.error("Could not find /shims/scons_introspect.py in resources")
             return
         }
-        val shimText = shimStream.bufferedReader().use { it.readText() }
+
+        val bomStream = shimStream.buffered()
+
+        val bom = ByteArray(3)
+        bomStream.read(bom)
+
+        if (bom[0] != 0xEF.toByte() || bom[1] != 0xBB.toByte() || bom[2] != 0xBF.toByte()) {
+            bomStream.reset()
+        }
+
+        val shimText = bomStream.bufferedReader(StandardCharsets.UTF_8).use { it.readText() }
         val siteScons = projectRoot.resolve("site_scons")
         val target = siteScons.resolve("site_init.py")
 
@@ -27,7 +38,7 @@ object SConsShimInstaller {
         if (existing.contains(SENTINEL_BEGIN)) return
 
         val block = "\n$SENTINEL_BEGIN\n$shimText\n$SENTINEL_END\n"
-        target.writeText(existing + block)
+        target.writeText(existing + block, StandardCharsets.UTF_8)
         logEntry(projectRoot, "Installed introspection shim into $target")
     }
 
