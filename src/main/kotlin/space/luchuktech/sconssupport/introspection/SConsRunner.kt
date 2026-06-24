@@ -13,6 +13,9 @@ import java.nio.file.Path
 data class RunResult(val stdout: String, val stderr: String, val exitCode: Int)
 
 object SConsRunner {
+
+//    private val LOG = logger<SConsRunner>()
+
     fun dryRun(
         projectRoot: Path,
         settings: SConsProjectSettings,
@@ -42,9 +45,10 @@ object SConsRunner {
 
         var commandLine = GeneralCommandLine(cmd)
             .withWorkDirectory(projectRoot.toFile())
+//            .withEnvironment(System.getenv())
             .withParentEnvironmentType(GeneralCommandLine.ParentEnvironmentType.CONSOLE)
 
-        commandLine = commandLine.withEnvironment(commandLine.parentEnvironment)
+        commandLine = commandLine.withEnvironment(System.getenv())
 
         val handler = OSProcessHandler(commandLine)
         val stdoutBuilder = StringBuilder()
