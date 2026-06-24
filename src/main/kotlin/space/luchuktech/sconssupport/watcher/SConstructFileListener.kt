@@ -3,6 +3,7 @@
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.newvfs.BulkFileListener
 import com.intellij.openapi.vfs.newvfs.events.VFileCreateEvent
+import com.intellij.openapi.vfs.newvfs.events.VFileDeleteEvent
 import com.intellij.openapi.vfs.newvfs.events.VFileEvent
 import com.intellij.openapi.wm.ToolWindow
 import com.intellij.openapi.wm.ToolWindowManager
@@ -40,6 +41,10 @@ class SConstructFileListener(private val project: Project) : BulkFileListener {
             event is VFileCreateEvent
         }) {
             getToolWindow().isAvailable = true
+        } else if (sconsEvents.any { event ->
+            event is VFileDeleteEvent
+        }) {
+            getToolWindow().isAvailable = false
         }
     }
 
