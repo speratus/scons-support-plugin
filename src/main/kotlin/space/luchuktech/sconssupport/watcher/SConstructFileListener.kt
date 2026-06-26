@@ -11,7 +11,9 @@ import space.luchuktech.sconssupport.settings.SConsProjectSettings
 
 class SConstructFileListener(private val project: Project) : BulkFileListener {
 
-    private lateinit var sconsToolWindow: ToolWindow
+    private val sconsToolWindow: ToolWindow? by lazy {
+        ToolWindowManager.getInstance(project).getToolWindow("SCons")
+    }
 
     override fun after(events: List<VFileEvent>) {
         if (!SConsProjectSettings.getInstance(project).state.autoSync) return
@@ -40,25 +42,12 @@ class SConstructFileListener(private val project: Project) : BulkFileListener {
         if (sconsEvents.any { event ->
             event is VFileCreateEvent
         }) {
-            getToolWindow().isAvailable = true
+            sconsToolWindow?.isAvailable = true
         } else if (sconsEvents.any { event ->
             event is VFileDeleteEvent
         }) {
-            getToolWindow().isAvailable = false
+            sconsToolWindow?.isAvailable = false
         }
-    }
-
-    private fun getToolWindow(): ToolWindow {
-        if (!::sconsToolWindow.isInitialized) {
-            val sconsWindow = ToolWindowManager.getInstance(project).getToolWindow("SCons")
-            if (sconsWindow != null) {
-                sconsToolWindow = sconsWindow
-            } else {
-                throw IllegalStateException("No SCons tool window available!")
-            }
-        }
-
-        return sconsToolWindow
     }
 
 }
