@@ -1,5 +1,9 @@
 ﻿package space.luchuktech.sconssupport.settings
 
+import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory
+import com.intellij.openapi.project.Project
+import com.intellij.openapi.ui.TextBrowseFolderListener
+import com.intellij.openapi.ui.TextFieldWithBrowseButton
 import com.intellij.ui.components.JBCheckBox
 import com.intellij.ui.components.JBLabel
 import com.intellij.ui.components.JBTextField
@@ -8,13 +12,35 @@ import javax.swing.JPanel
 
 class SConsSettingsComponent {
     val panel: JPanel
-    private val pythonPathField = JBTextField()
-    private val sconsPathField = JBTextField()
+    private val pythonPathField = TextFieldWithBrowseButton()
+    private val sconsPathField = TextFieldWithBrowseButton()
     private val sconsArgsField = JBTextField()
     private val autoSyncCheck = JBCheckBox("Auto-sync when SConstruct changes")
     private val generateCompileCommandsCheck = JBCheckBox("Generate compile_commands.json")
 
     init {
+        sconsPathField.addBrowseFolderListener(
+            TextBrowseFolderListener(
+                FileChooserDescriptorFactory.singleFile().apply {
+                    withFileFilter {
+                        it.toNioPath().toFile().canExecute()
+                    }
+                    title = "Choose SCons executable"
+                }
+            )
+        )
+
+        pythonPathField.addBrowseFolderListener(
+            TextBrowseFolderListener(
+                FileChooserDescriptorFactory.singleFile().apply {
+                    withFileFilter {
+                        it.toNioPath().toFile().canExecute()
+                    }
+                    title = "Choose Python executable"
+                }
+            )
+        )
+
         panel = FormBuilder.createFormBuilder()
             .addLabeledComponent(JBLabel("Python interpreter path:"), pythonPathField, 1, false)
             .addLabeledComponent(JBLabel("SCons script path:"), sconsPathField, 1, false)
