@@ -2,8 +2,8 @@
 
 import com.intellij.execution.configurations.GeneralCommandLine
 import com.intellij.execution.process.OSProcessHandler
-import com.intellij.execution.process.ProcessAdapter
 import com.intellij.execution.process.ProcessEvent
+import com.intellij.execution.process.ProcessListener
 import com.intellij.openapi.progress.ProgressIndicator
 import com.intellij.openapi.util.Key
 import com.intellij.openapi.util.SystemInfo
@@ -54,7 +54,7 @@ object SConsRunner {
         val stdoutBuilder = StringBuilder()
         val stderrBuilder = StringBuilder()
 
-        handler.addProcessListener(object : ProcessAdapter() {
+        handler.addProcessListener(object : ProcessListener {
             override fun onTextAvailable(event: ProcessEvent, outputType: Key<*>) {
                 if (outputType.toString() == "stdout") {
                     stdoutBuilder.append(event.text)
