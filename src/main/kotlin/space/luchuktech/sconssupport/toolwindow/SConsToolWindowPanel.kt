@@ -20,9 +20,7 @@ import space.luchuktech.sconssupport.SConsIcons
 import space.luchuktech.sconssupport.compiledb.CompileCommandsGenerator
 import space.luchuktech.sconssupport.introspection.*
 import space.luchuktech.sconssupport.model.SConsProjectModel
-import space.luchuktech.sconssupport.model.SConsTarget
 import space.luchuktech.sconssupport.settings.SConsProjectSettings
-import java.awt.BorderLayout
 import java.nio.file.Paths
 import java.security.MessageDigest
 import javax.swing.*
