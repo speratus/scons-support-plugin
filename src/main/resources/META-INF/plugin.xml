@@ -11,6 +11,7 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <projectConfigurable
+            parentId="build.tools"
             instance="space.luchuktech.sconssupport.settings.SConsSettingsConfigurable"
             id="space.luchuktech.sconssupport.settings"
             displayName="SCons"/>
