@@ -21,6 +21,9 @@
             anchor="right"
             factoryClass="space.luchuktech.sconssupport.toolwindow.SConsToolWindowFactory"
             icon="/icons/scons.svg"/>
+        <notificationGroup
+            id="SCons Error"
+            displayType="BALLOON" />
     </extensions>
 
     <projectListeners>
