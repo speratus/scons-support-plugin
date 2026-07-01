@@ -107,7 +107,7 @@ class SConsIntrospect:
             "targets": self.targets,
             "options": self.options
         }
-        json_str = json.dumps(output, indent=2)
+        json_str = json.dumps(output)
         # Write to stdout with a marker for easy extraction if needed
         print("---SCONS_INTROSPECT_BEGIN---")
         print(json_str)
