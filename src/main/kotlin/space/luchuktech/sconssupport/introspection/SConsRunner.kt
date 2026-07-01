@@ -7,6 +7,7 @@ import com.intellij.execution.process.ProcessListener
 import com.intellij.openapi.progress.ProgressIndicator
 import com.intellij.openapi.util.Key
 import com.intellij.openapi.util.SystemInfo
+import space.luchuktech.sconssupport.notification.NotificationDispatcher
 import space.luchuktech.sconssupport.settings.SConsProjectSettings
 import java.nio.file.Path
 
@@ -50,7 +51,13 @@ object SConsRunner {
 
         commandLine = commandLine.withEnvironment(System.getenv())
 
-        val handler = OSProcessHandler(commandLine)
+        val handler: OSProcessHandler
+        try {
+            handler = OSProcessHandler(commandLine)
+        } catch (ex: Exception) {
+            NotificationDispatcher.createErrorNotification("Failed to start SCons with message: ${ex.message}")
+            return RunResult("", "", -1)
+        }
         val stdoutBuilder = StringBuilder()
         val stderrBuilder = StringBuilder()
 
